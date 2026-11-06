@@ -208,15 +208,15 @@
         <a class="btn" href="#photo">See my photos</a>
       </div>
     </div>
-    <!-- Rotating home images: add photos/home-1.jpg through home-5.jpg.
+    <!-- Rotating home images: your first photo is Photos/Photo_Project_01.jpg. Add more by changing home-2.jpg to home-5.jpg to your file names.
          To add more, copy one <img> line (keep the first one with class="on" only). -->
     <div class="home-img slideshow" id="slides" aria-roledescription="carousel" aria-label="Featured work">
       <div class="slides-stage">
-        <img class="on" src="photos/home-1.jpg" alt="Featured still 1" >
-        <img src="photos/home-2.jpg" alt="Featured still 2">
-        <img src="photos/home-3.jpg" alt="Featured still 3">
-        <img src="photos/home-4.jpg" alt="Featured still 4">
-        <img src="photos/home-5.jpg" alt="Featured still 5">
+        <img class="on" src="Photos/Photo_Project_01.jpg" alt="Featured still 1" >
+        <img src="Photos/home-2.jpg" alt="Featured still 2">
+        <img src="Photos/home-3.jpg" alt="Featured still 3">
+        <img src="Photos/home-4.jpg" alt="Featured still 4">
+        <img src="Photos/home-5.jpg" alt="Featured still 5">
       </div>
       <div class="dots" role="group" aria-label="Choose image"></div>
     </div>
@@ -259,27 +259,27 @@
     <p class="lede">Photographs from my personal work. Click any frame to view it larger.</p>
     <div class="gallery">
       <figure class="frame">
-        <div class="img"><img src="photos/photo-01.jpg" alt="Describe this photo" loading="lazy"></div>
+        <div class="img"><img src="Photos/photo-01.jpg" alt="Describe this photo" loading="lazy"></div>
         <figcaption><span>Photo title</span><span>2026</span></figcaption>
       </figure>
       <figure class="frame">
-        <div class="img"><img src="photos/photo-02.jpg" alt="Describe this photo" loading="lazy"></div>
+        <div class="img"><img src="Photos/photo-02.jpg" alt="Describe this photo" loading="lazy"></div>
         <figcaption><span>Photo title</span><span>2026</span></figcaption>
       </figure>
       <figure class="frame">
-        <div class="img"><img src="photos/photo-03.jpg" alt="Describe this photo" loading="lazy"></div>
+        <div class="img"><img src="Photos/photo-03.jpg" alt="Describe this photo" loading="lazy"></div>
         <figcaption><span>Photo title</span><span>2026</span></figcaption>
       </figure>
       <figure class="frame">
-        <div class="img"><img src="photos/photo-04.jpg" alt="Describe this photo" loading="lazy"></div>
+        <div class="img"><img src="Photos/photo-04.jpg" alt="Describe this photo" loading="lazy"></div>
         <figcaption><span>Photo title</span><span>2026</span></figcaption>
       </figure>
       <figure class="frame">
-        <div class="img"><img src="photos/photo-05.jpg" alt="Describe this photo" loading="lazy"></div>
+        <div class="img"><img src="Photos/photo-05.jpg" alt="Describe this photo" loading="lazy"></div>
         <figcaption><span>Photo title</span><span>2026</span></figcaption>
       </figure>
       <figure class="frame">
-        <div class="img"><img src="photos/photo-06.jpg" alt="Describe this photo" loading="lazy"></div>
+        <div class="img"><img src="Photos/photo-06.jpg" alt="Describe this photo" loading="lazy"></div>
         <figcaption><span>Photo title</span><span>2026</span></figcaption>
       </figure>
     </div>
@@ -291,8 +291,8 @@
 <div class="page alt" id="about" data-title="About me">
   <div class="wrap about">
     <div class="portrait">
-      <!-- Your portrait: photos/portrait.jpg -->
-      <img src="photos/portrait.jpg" alt="Portrait of Jennifer Baldwin" loading="lazy">
+      <!-- Your portrait: Photos/portrait.jpg -->
+      <img src="Photos/portrait.jpg" alt="Portrait of Jennifer Baldwin" loading="lazy">
     </div>
     <div>
       <h2>About me</h2>
@@ -430,20 +430,27 @@
 
 
   /* ----- Rotating home images ----- */
-  (function () {
+  /* Only images that actually load are used, so you can start with one photo and add more later. */
+  window.addEventListener('load', function () {
     var box = document.getElementById('slides');
-    var imgs = box.querySelectorAll('.slides-stage img');
     var dots = box.querySelector('.dots');
+    var imgs = Array.prototype.filter.call(box.querySelectorAll('.slides-stage img'), function (im) {
+      return im.complete && im.naturalWidth > 0;
+    });
     var n = imgs.length, i = 0, timer = null;
+    if (n === 0) return;
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var SECONDS = 12; /* time each image stays on screen */
 
     imgs.forEach(function (im, k) {
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.setAttribute('aria-label', 'Show image ' + (k + 1));
-      b.addEventListener('click', function () { go(k); restart(); });
-      dots.appendChild(b);
+      im.classList.toggle('on', k === 0);
+      if (n > 1) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Show image ' + (k + 1));
+        b.addEventListener('click', function () { go(k); restart(); });
+        dots.appendChild(b);
+      }
     });
     var btns = dots.querySelectorAll('button');
 
@@ -464,7 +471,7 @@
 
     go(0);
     start();
-  })();
+  });
 
   /* ----- Lightbox ----- */
   var lb = document.getElementById('lb');
