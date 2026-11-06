@@ -212,7 +212,7 @@
          To add more, copy one <img> line and change the file name. -->
     <div class="home-img slideshow" id="slides" aria-roledescription="carousel" aria-label="Featured work">
       <div class="slides-stage">
-        <img class="on" src="Photos/Photo_Project_01.jpg" alt="Featured still 1" >
+        <img class="on" src="Photos/Photo_Project_01.jpg" alt="Featured still 1">
         <img src="Photos/Photo_Project_02.jpg" alt="Featured still 2">
         <img src="Photos/Photo_Project_03.jpg" alt="Featured still 3">
         <img src="Photos/Photo_Project_04.jpg" alt="Featured still 4">
@@ -429,27 +429,20 @@
 
 
   /* ----- Rotating home images ----- */
-  /* Only images that actually load are used, so you can start with one photo and add more later. */
-  window.addEventListener('load', function () {
+  (function () {
     var box = document.getElementById('slides');
+    var imgs = box.querySelectorAll('.slides-stage img');
     var dots = box.querySelector('.dots');
-    var imgs = Array.prototype.filter.call(box.querySelectorAll('.slides-stage img'), function (im) {
-      return im.complete && im.naturalWidth > 0;
-    });
     var n = imgs.length, i = 0, timer = null;
-    if (n === 0) return;
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var SECONDS = 12; /* time each image stays on screen */
 
     imgs.forEach(function (im, k) {
-      im.classList.toggle('on', k === 0);
-      if (n > 1) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.setAttribute('aria-label', 'Show image ' + (k + 1));
-        b.addEventListener('click', function () { go(k); restart(); });
-        dots.appendChild(b);
-      }
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Show image ' + (k + 1));
+      b.addEventListener('click', function () { go(k); restart(); });
+      dots.appendChild(b);
     });
     var btns = dots.querySelectorAll('button');
 
@@ -470,7 +463,7 @@
 
     go(0);
     start();
-  });
+  })();
 
   /* ----- Lightbox ----- */
   var lb = document.getElementById('lb');
